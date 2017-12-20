@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"module": "commonjs",
+		"target": "ES5",
+		"outDir": "dist",
+		"sourceMap": true,
+		"strict": true,
+		"types" : ["node","lodash","mocha"],
+		"lib": [
+			"es2015",
+			"es2015.promise"
+		]
+	},
+	"exclude": [
+		"node_modules"
+	]
+}

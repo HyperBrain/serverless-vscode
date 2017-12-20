@@ -1,0 +1,148 @@
+{
+	"name": "serverless-vscode",
+	"description": "Serverless integration. Lets you manage your service from within VSCode.",
+	"version": "0.0.2",
+	"publisher": "frankschmid",
+	"author": "Frank Schmid <fschmid740@gmail.com>",
+	"engines": {
+		"vscode": "^1.19.0"
+	},
+	"license": "MIT",
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onView:serverlessOutline"
+	],
+	"main": "./dist/extension.js",
+	"contributes": {
+		"configuration": {
+			"type": "object",
+			"title": "Serverless configuration",
+			"properties": {
+				"serverless.useGlobal": {
+					"type": "boolean",
+					"default": "false",
+					"description": "Use global Serverless installation"
+				},
+				"serverless.slsDebug": {
+					"type": "boolean",
+					"default": "false",
+					"description": "Set SLS_DEBUG for debug output"
+				},
+				"serverless.aws.defaultStage": {
+					"type": "string",
+					"default": "dev",
+					"description": "Default stage for builds and deployments"
+				},
+				"serverless.aws.defaultRegion": {
+					"type": "string",
+					"default": "us-east-1",
+					"description": "Default region for builds and deployments"
+				}
+			}
+		},
+		"views": {
+			"explorer": [
+				{
+					"id": "serverlessOutline",
+					"name": "Serverless",
+					"when": "resourceLangId == 'yaml'"
+				}
+			]
+		},
+		"commands": [
+			{
+				"command": "serverless.package",
+				"title": "Package service",
+				"category": "Serverless"
+			},
+			{
+				"command": "serverless.deploy",
+				"title": "Deploy service",
+				"category": "Serverless"
+			},
+			{
+				"command": "serverless.openHandler",
+				"title": "Open handler",
+				"category": "Serverless"
+			},
+			{
+				"command": "serverless.invokeLocal",
+				"title": "Invoke local",
+				"category": "Serverless"
+			},
+			{
+				"command": "serverless.deployFunction",
+				"title": "Deploy function",
+				"category": "Serverless"
+			},
+			{
+				"command": "serverless.logs",
+				"title": "Show function logs",
+				"category": "Serverless"
+			},
+			{
+				"command": "serverless.resolve",
+				"title": "Resolve",
+				"category": "Serverless"
+			}
+		],
+		"menus": {
+			"view/item/context": [
+				{
+					"command": "serverless.openHandler",
+					"when": "viewItem == function"
+				},
+				{
+					"command": "serverless.resolve",
+					"when": "viewItem == container"
+				},
+				{
+					"command": "serverless.invokeLocal",
+					"when": "viewItem == function"
+				},
+				{
+					"command": "serverless.logs",
+					"when": "viewItem == function"
+				},
+				{
+					"command": "serverless.deployFunction",
+					"when": "viewItem == function"
+				}
+			],
+			"explorer/context": [
+				{
+					"when": "filesExplorerFocus",
+					"command": "serverless.package",
+					"group": "Serverless@1"
+				},
+				{
+					"when": "filesExplorerFocus",
+					"command": "serverless.deploy",
+					"group": "Serverless@2"
+				}
+			]
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "tsc -p ./",
+		"compile": "tsc -watch -p ./",
+		"postinstall": "node ./node_modules/vscode/bin/install",
+		"test": "node ./node_modules/vscode/bin/test"
+	},
+	"devDependencies": {
+		"@types/js-yaml": "^3.10.1",
+		"@types/lodash": "^4.14.91",
+		"@types/mocha": "^2.2.44",
+		"@types/node": "^8.5.1",
+		"mocha": "^4.0.1",
+		"typescript": "^2.6.2",
+		"vscode": "^1.1.10"
+	},
+	"dependencies": {
+		"js-yaml": "^3.10.0",
+		"jsonc-parser": "^1.0.0",
+		"lodash": "^4.17.4"
+	}
+}
