@@ -6,6 +6,22 @@ export interface Command {
 	invoke(node: ServerlessNode): Thenable<void>;
 }
 
+export class CommandBase implements Command {
+
+	static askForStage(): Thenable<string> {
+		return window.showInputBox({
+			prompt: "Stage (defaults to dev)",
+			placeHolder: "dev"
+		})
+		.then(stage => stage || "dev");
+	}
+
+	invoke(node: ServerlessNode): Thenable<void> {
+		throw new Error("Must be overridden.");
+	}
+
+}
+
 /**
  * Wrap commands that process ServerlessNode objects and
  * provide a common UX.

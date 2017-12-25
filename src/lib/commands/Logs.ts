@@ -3,15 +3,16 @@ import { Serverless } from "../Serverless";
 import { ServerlessNode, NodeKind } from "../ServerlessNode";
 import * as _ from "lodash";
 import * as path from "path";
-import { Command } from "../CommandHandler";
+import { Command, CommandBase } from "../CommandHandler";
 
 /**
  * Wrapper for Serverless logs.
  */
 
-export class Logs implements Command {
+export class Logs extends CommandBase {
 
 	constructor(private context: ExtensionContext) {
+		super();
 	}
 
 	invoke(node: ServerlessNode): Thenable<void> {
@@ -21,11 +22,7 @@ export class Logs implements Command {
 			return Promise.reject(new Error("Target must be a function"));
 		}
 
-		return window.showInputBox({
-			prompt: "Stage (defaults to dev)",
-			placeHolder: "dev"
-		})
-		.then(stage => stage || "dev")
+		return CommandBase.askForStage()
 		.then(stage => {
 			const options = {
 				stage,

@@ -40,6 +40,8 @@ Each function then contains a list of all defined HTTP endpoints in the function
 
 All function related commands of the extension can be called via the context menu of the function.
 
+![FunctionContext](images/function-context.png "Function context menu")
+
 ##### Invoke local
 
 Invoke the selected function locally. The command lets you select an `event.json` that will be used
