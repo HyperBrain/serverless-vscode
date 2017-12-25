@@ -4,16 +4,25 @@
 [![Installs](https://vsmarketplacebadge.apphb.com/installs/frankschmid.serverless-vscode.svg)](https://marketplace.visualstudio.com/items?itemName=frankschmid.serverless-vscode)
 [![Ratings](https://vsmarketplacebadge.apphb.com/rating/frankschmid.serverless-vscode.svg)](https://marketplace.visualstudio.com/items?itemName=frankschmid.serverless-vscode)
 
-This extension enables an integration of Serverless projects with VSCode.
+This extension enables an integration of Serverless projects with VSCode. It eliminates the need
+to start Serverless commands from a separate command line.
 
 ## Installation
 
 In order to install an extension you need to open the extension palette and search for serverless-vscode.
 You can then install it.
 
+### Alpha version
+
 This is currently an alpha version, that integrates only a subset of possible commands.
 See the GitHub repository for remaining planned features for the final version. You're encouraged to
 test the version and create additional feature requests.
+
+**Currently the extension only supports Serverless projects with Serverless installed locally!**
+
+That means, that Serverless must be a development dependency of the project itself. A subsequent
+version of the extension will also support the globally installed Serverless framework and a
+configuration for that.
 
 ## Usage
 
