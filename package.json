@@ -8,7 +8,11 @@
 		"vscode": "^1.19.0"
 	},
 	"license": "MIT",
-	"categories": [
+	"repository": {
+    	"type": "git",
+    	"url": "https://github.com/HyperBrain/serverless-vscode"
+  	},
+  	"categories": [
 		"Other"
 	],
 	"activationEvents": [
@@ -79,7 +83,7 @@
 			},
 			{
 				"command": "serverless.logs",
-				"title": "Show function logs",
+				"title": "Show logs",
 				"category": "Serverless"
 			},
 			{
