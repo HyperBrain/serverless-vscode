@@ -6,18 +6,16 @@ import * as path from "path";
 import { Command, CommandBase } from "../CommandHandler";
 
 /**
- * Wrapper for Serverless logs.
+ * Wrapper for Serverless deploy function.
  */
 
-export class Logs extends CommandBase {
+export class DeployFunction extends CommandBase {
 
 	constructor(private context: ExtensionContext) {
 		super();
 	}
 
 	invoke(node: ServerlessNode): Thenable<void> {
-		console.log(`Logs`);
-
 		if (node.kind !== NodeKind.FUNCTION) {
 			return Promise.reject(new Error("Target must be a function"));
 		}
@@ -29,7 +27,7 @@ export class Logs extends CommandBase {
 				function: node.name,
 				cwd: node.documentRoot
 			};
-			return Serverless.invoke("logs", options);
+			return Serverless.invoke("deploy function", options);
 		});
 	}
 

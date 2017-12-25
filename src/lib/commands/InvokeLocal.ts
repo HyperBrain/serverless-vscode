@@ -16,8 +16,6 @@ export class InvokeLocal extends CommandBase {
 	}
 
 	invoke(node: ServerlessNode): Thenable<void> {
-		console.log(`Invoke local`);
-
 		if (node.kind !== NodeKind.FUNCTION) {
 			return Promise.reject(new Error("Target must be a function"));
 		}
@@ -45,7 +43,7 @@ export class InvokeLocal extends CommandBase {
 					path: filePath,
 					cwd: node.documentRoot
 				};
-				return Serverless.invoke(`invoke local`, options);
+				return Serverless.invoke("invoke local", options);
 			});
 		});
 	}

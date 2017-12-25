@@ -42,6 +42,11 @@ All function related commands of the extension can be called via the context men
 
 ![FunctionContext](images/function-context.png "Function context menu")
 
+##### Deploy function
+
+Deploys the selected function with `serverless deploy function`. Attention: In general, single function
+deployment does not replace a service deployment. See the Serverless documentation for details.
+
 ##### Invoke local
 
 Invoke the selected function locally. The command lets you select an `event.json` that will be used

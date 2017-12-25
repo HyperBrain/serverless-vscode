@@ -16,8 +16,6 @@ export class Resolve extends CommandBase {
 	}
 
 	invoke(node: ServerlessNode): Thenable<void> {
-		console.log(`Resolve`);
-
 		if (node.kind !== NodeKind.CONTAINER) {
 			return Promise.reject(new Error("Target must be a function"));
 		}
@@ -28,7 +26,7 @@ export class Resolve extends CommandBase {
 				stage,
 				cwd: node.documentRoot
 			};
-			return Serverless.invokeWithResult(`print`, options);
+			return Serverless.invokeWithResult("print", options);
 		})
 		.then((resolvedYaml: string) => {
 			return workspace.openTextDocument(Uri.parse("untitled:" + path.join(node.documentRoot, "resolved.yml")))

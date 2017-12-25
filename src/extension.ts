@@ -7,6 +7,7 @@ import { OpenHandler } from './lib/commands/OpenHandler';
 import { Logs } from './lib/commands/Logs';
 import { CommandHandler } from './lib/CommandHandler';
 import { Resolve } from './lib/commands/Resolve';
+import { DeployFunction } from './lib/commands/DeployFunction';
 
 /**
  * Activation entry point for the extension
@@ -22,6 +23,7 @@ export function activate(context: ExtensionContext) {
 	CommandHandler.registerCommand(Resolve, "serverless.resolve", context);
 	CommandHandler.registerCommand(Logs, "serverless.logs", context);
 	CommandHandler.registerCommand(InvokeLocal, "serverless.invokeLocal", context);
+	CommandHandler.registerCommand(DeployFunction, "serverless.deployFunction", context);
 
 	return null;
 }
