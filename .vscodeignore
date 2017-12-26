@@ -1,4 +1,5 @@
 .vscode/**
+.github/**
 typings/**
 dist/test/**
 test/**
