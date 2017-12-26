@@ -76,6 +76,23 @@ export class ServerlessOutlineProvider implements TreeDataProvider<ServerlessNod
 		}
 	}
 
+	private addAPINode(apiRoot: ServerlessNode, httpNode: ServerlessNode) {
+		const http = httpNode.data;
+		const httpPath = _.compact(_.split(http.path, "/"));
+		const apiLeaf = _.reduce(_.initial(httpPath), (root, httpPathElement) => {
+			let apiPath = _.find(root.children, child => child.name === httpPathElement);
+			if (!apiPath) {
+				apiPath = new ServerlessNode(httpPathElement, NodeKind.APIPATH);
+				root.children.push(apiPath);
+			}
+			return apiPath;
+		}, apiRoot);
+		const method = _.last(httpPath);
+		if (method) {
+			apiLeaf.children.push(new ServerlessNode(method, NodeKind.APIMETHOD, http));
+		}
+	}
+
 	private parseService(service: any, document: TextDocument) {
 		const apiRootNode = new ServerlessNode("API", NodeKind.CONTAINER);
 		const functionRootNode = new ServerlessNode("Functions", NodeKind.CONTAINER);
@@ -92,7 +109,9 @@ export class ServerlessOutlineProvider implements TreeDataProvider<ServerlessNod
 					const httpNode = new ServerlessNode("HTTP", NodeKind.CONTAINER);
 					_.forEach(httpEvents, ({ http }) => {
 						const name = http.path;
-						httpNode.children.push(new ServerlessNode(name, NodeKind.APIMETHOD, http));
+						const httpMethodNode = new ServerlessNode(name, NodeKind.APIMETHOD, http);
+						httpNode.children.push(httpMethodNode);
+						this.addAPINode(apiRootNode, httpMethodNode);
 					});
 					functionNode.children.push(httpNode);
 				}
