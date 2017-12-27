@@ -1,0 +1,27 @@
+environment:
+  matrix:
+    - NODEJS_VERSION: "4"
+    - NODEJS_VERSION: "6"
+
+matrix:
+  fast_finish: true
+
+skip_branch_with_pr: true
+
+install:
+  # Get the version of Node.js
+  - ps: Install-Product node $Env:NODEJS_VERSION
+  # install modules
+  - npm install
+  - node --version
+  - npm --version
+
+test_script:
+  - npm run lint
+# Enable test as soon as unit tests are available
+#  - npm test
+
+# Don't actually build.
+build: off
+
+deploy: off
