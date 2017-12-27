@@ -2,7 +2,7 @@
 	"compilerOptions": {
 		"module": "commonjs",
 		"target": "ES5",
-		"outDir": "dist",
+		"outDir": "out",
 		"sourceMap": true,
 		"strict": true,
 		"types" : ["node","lodash","mocha"],
