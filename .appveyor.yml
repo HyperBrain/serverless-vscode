@@ -18,7 +18,8 @@ install:
 
 test_script:
   - npm run lint
-  - npm test
+# Enable test as soon as unit tests are available
+#  - npm test
 
 # Don't actually build.
 build: off
