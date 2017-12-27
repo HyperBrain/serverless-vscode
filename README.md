@@ -71,8 +71,12 @@ Open the handler source file that is associated with the function.
 
 #### API
 
+The API hive shows the combined API that will eventually be deployed to API Gateway.
 
 ## Releases
+
+*0.0.3*
+Added API hive
 
 *0.0.2*
 Initial alpha release
