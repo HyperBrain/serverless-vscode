@@ -27,7 +27,7 @@ export class InvokeLocal extends CommandBase {
 				canSelectFolders: false,
 				canSelectMany: false,
 				filters: {
-					"Event JSON": [ "json" ]
+					"Event JSON": [ "json" ],
 				},
 				openLabel: "Select event",
 			})
