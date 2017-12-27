@@ -1,33 +1,23 @@
-import { ExtensionContext, Disposable, commands, window } from "vscode";
-import { ServerlessNode } from "./ServerlessNode";
 import * as _ from "lodash";
-
-export interface Command {
-	invoke(node: ServerlessNode): Thenable<void>;
-}
-
-export class CommandBase implements Command {
-
-	static askForStage(): Thenable<string> {
-		return window.showInputBox({
-			prompt: "Stage (defaults to dev)",
-			placeHolder: "dev"
-		})
-		.then(stage => stage || "dev");
-	}
-
-	invoke(node: ServerlessNode): Thenable<void> {
-		throw new Error("Must be overridden.");
-	}
-
-}
+import { commands, Disposable, ExtensionContext, window } from "vscode";
+import { ICommand } from "./CommandBase";
+import { ServerlessNode } from "./ServerlessNode";
 
 /**
  * Wrap commands that process ServerlessNode objects and
  * provide a common UX.
  */
 
-export class CommandHandler<T extends Command> {
+export class CommandHandler<T extends ICommand> {
+
+	public static registerCommand<T extends ICommand>(
+		commandClass: { new (context: ExtensionContext): T; },
+		name: string,
+		context: ExtensionContext,
+	) {
+		const handler = new CommandHandler(context, commandClass);
+		context.subscriptions.push(commands.registerCommand(name, handler.invoke));
+	}
 
 	private handler: T;
 
@@ -36,15 +26,11 @@ export class CommandHandler<T extends Command> {
 		this.invoke = this.invoke.bind(this);
 	}
 
-	invoke(node: ServerlessNode): Thenable<void> {
+	public invoke(node: ServerlessNode): Thenable<void> {
 		return this.handler.invoke(node)
 		.then(_.noop, err => {
 			return window.showErrorMessage(`Serverless: ${err.message}`);
 		});
 	}
 
-	static registerCommand<T extends Command>(commandClass: { new (context: ExtensionContext): T; }, name: string, context: ExtensionContext) {
-		const handler = new CommandHandler(context, commandClass);
-		context.subscriptions.push(commands.registerCommand(name, handler.invoke));
-	}
 }

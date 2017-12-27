@@ -1,18 +1,35 @@
-import { ExtensionContext, TreeDataProvider, Event, TreeItem, window, TextEditor, TreeItemCollapsibleState, Command, TextDocument, Uri, EventEmitter } from "vscode";
-import * as json from "jsonc-parser";
 import * as yaml from "js-yaml";
+import * as json from "jsonc-parser";
 import * as _ from "lodash";
 import * as path from "path";
+import {
+	Command,
+	Event,
+	EventEmitter,
+	ExtensionContext,
+	TextDocument,
+	TextEditor,
+	TreeDataProvider,
+	TreeItem,
+	TreeItemCollapsibleState,
+	Uri,
+	window,
+} from "vscode";
 
-import { ServerlessNode, NodeKind } from "./ServerlessNode";
+import { NodeKind, ServerlessNode } from "./ServerlessNode";
 
 export class ServerlessOutlineProvider implements TreeDataProvider<ServerlessNode> {
+
+	// tslint:disable-next-line:variable-name
+	private _onDidChangeTreeData: EventEmitter<ServerlessNode | null> = new EventEmitter<ServerlessNode | null>();
+	// tslint:disable-next-line:member-ordering
+	public readonly onDidChangeTreeData: Event<ServerlessNode | null> = this._onDidChangeTreeData.event;
 
 	private service: any;
 	private warnings: string[];
 	private nodes: ServerlessNode;
 
-	constructor(private context: ExtensionContext) {
+	public constructor(private context: ExtensionContext) {
 		this.warnings = [];
 		this.nodes = new ServerlessNode("Service", NodeKind.ROOT);
 
@@ -23,16 +40,13 @@ export class ServerlessOutlineProvider implements TreeDataProvider<ServerlessNod
 		this.parseYaml();
 	}
 
-	private _onDidChangeTreeData: EventEmitter<ServerlessNode | null> = new EventEmitter<ServerlessNode | null>();
-	readonly onDidChangeTreeData: Event<ServerlessNode | null> = this._onDidChangeTreeData.event;
-
-	getTreeItem(element: ServerlessNode): TreeItem {
+	public getTreeItem(element: ServerlessNode): TreeItem {
 		const treeItem = new TreeItem(element.name);
 		treeItem.contextValue = element.kind;
 		if (element.hasChildren) {
-			treeItem.collapsibleState = element.kind !== NodeKind.ROOT ? TreeItemCollapsibleState.Collapsed : TreeItemCollapsibleState.Expanded;
-		}
-		else {
+			treeItem.collapsibleState =
+				element.kind !== NodeKind.ROOT ? TreeItemCollapsibleState.Collapsed : TreeItemCollapsibleState.Expanded;
+		} else {
 			treeItem.collapsibleState = TreeItemCollapsibleState.None;
 		}
 		// For API Methods we set the method as icon
@@ -43,7 +57,7 @@ export class ServerlessOutlineProvider implements TreeDataProvider<ServerlessNod
 		return treeItem;
 	}
 
-	getChildren(element?: ServerlessNode): ServerlessNode[] {
+	public getChildren(element?: ServerlessNode): ServerlessNode[] {
 		if (!element) {
 			return this.nodes.children;
 		}
@@ -51,7 +65,7 @@ export class ServerlessOutlineProvider implements TreeDataProvider<ServerlessNod
 		return element.children;
 	}
 
-	refresh(offset?: ServerlessNode): void {
+	private refresh(offset?: ServerlessNode): void {
 		this.parseYaml();
 		if (offset) {
 			this._onDidChangeTreeData.fire(offset);
@@ -71,7 +85,7 @@ export class ServerlessOutlineProvider implements TreeDataProvider<ServerlessNod
 				const service = yaml.safeLoad(document.getText(), {});
 				this.parseService(service, document);
 			} catch (err) {
-				console.error(err.message);
+				// console.error(err.message);
 			}
 		}
 	}
@@ -99,12 +113,12 @@ export class ServerlessOutlineProvider implements TreeDataProvider<ServerlessNod
 		const documentRoot = path.dirname(document.fileName);
 
 		// Parse functions
-		_.forOwn(service.functions, (func, name) => {
-			const functionNode = new ServerlessNode(name, NodeKind.FUNCTION, func);
+		_.forOwn(service.functions, (func, funcName) => {
+			const functionNode = new ServerlessNode(funcName, NodeKind.FUNCTION, func);
 
 			// Add nodes for the function events
 			if (!_.isEmpty(func.events)) {
-				const httpEvents = _.filter(func.events, funcEvent => funcEvent["http"]);
+				const httpEvents = _.filter(func.events, funcEvent => funcEvent.http);
 				if (!_.isEmpty(httpEvents)) {
 					const httpNode = new ServerlessNode("HTTP", NodeKind.CONTAINER);
 					_.forEach(httpEvents, ({ http }) => {

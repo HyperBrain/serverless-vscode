@@ -1,9 +1,9 @@
-import { window, Uri, ExtensionContext } from "vscode";
-import { Serverless } from "../Serverless";
-import { ServerlessNode, NodeKind } from "../ServerlessNode";
 import * as _ from "lodash";
 import * as path from "path";
-import { Command, CommandBase } from "../CommandHandler";
+import { ExtensionContext, Uri, window } from "vscode";
+import { CommandBase } from "../CommandBase";
+import { Serverless } from "../Serverless";
+import { NodeKind, ServerlessNode } from "../ServerlessNode";
 
 /**
  * Wrapper for Serverless logs.
@@ -15,19 +15,17 @@ export class Logs extends CommandBase {
 		super();
 	}
 
-	invoke(node: ServerlessNode): Thenable<void> {
-		console.log(`Logs`);
-
+	public invoke(node: ServerlessNode): Thenable<void> {
 		if (node.kind !== NodeKind.FUNCTION) {
 			return Promise.reject(new Error("Target must be a function"));
 		}
 
 		return CommandBase.askForStage()
-		.then(stage => {
+		.then((stage: string) => {
 			const options = {
-				stage,
+				cwd: node.documentRoot,
 				function: node.name,
-				cwd: node.documentRoot
+				stage,
 			};
 			return Serverless.invoke("logs", options);
 		});

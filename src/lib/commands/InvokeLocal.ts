@@ -1,9 +1,9 @@
-import { window, Uri, ExtensionContext } from "vscode";
-import { Serverless } from "../Serverless";
-import { ServerlessNode, NodeKind } from "../ServerlessNode";
 import * as _ from "lodash";
 import * as path from "path";
-import { Command, CommandBase } from "../CommandHandler";
+import { ExtensionContext, Uri, window } from "vscode";
+import { CommandBase } from "../CommandBase";
+import { Serverless } from "../Serverless";
+import { NodeKind, ServerlessNode } from "../ServerlessNode";
 
 /**
  * Wrapper for Serverless invoke local.
@@ -15,7 +15,7 @@ export class InvokeLocal extends CommandBase {
 		super();
 	}
 
-	invoke(node: ServerlessNode): Thenable<void> {
+	public invoke(node: ServerlessNode): Thenable<void> {
 		if (node.kind !== NodeKind.FUNCTION) {
 			return Promise.reject(new Error("Target must be a function"));
 		}
@@ -26,10 +26,10 @@ export class InvokeLocal extends CommandBase {
 				canSelectFiles: true,
 				canSelectFolders: false,
 				canSelectMany: false,
-				openLabel: "Select event",
 				filters: {
-					'Event JSON': [ 'json' ]
-				}
+					"Event JSON": [ "json" ]
+				},
+				openLabel: "Select event",
 			})
 			.then((files: Uri[] | undefined) => {
 				if (!files || _.isEmpty(files)) {
@@ -38,10 +38,10 @@ export class InvokeLocal extends CommandBase {
 
 				const filePath = path.relative(node.documentRoot, files[0].fsPath);
 				const options = {
-					stage,
+					cwd: node.documentRoot,
 					function: node.name,
 					path: filePath,
-					cwd: node.documentRoot
+					stage,
 				};
 				return Serverless.invoke("invoke local", options);
 			});

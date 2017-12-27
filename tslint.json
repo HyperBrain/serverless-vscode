@@ -1,0 +1,13 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:recommended"
+    ],
+    "jsRules": {},
+    "rules": {
+		"arrow-parens": [true, "ban-single-arg-parens"],
+		"indent": [true, "tabs"],
+		"no-trailing-whitespace": [true, "ignore-jsdoc"]
+	},
+    "rulesDirectory": []
+}

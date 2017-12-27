@@ -1,23 +1,23 @@
-import { Command, ExtensionContext } from "vscode";
 import * as _ from "lodash";
+import { Command, ExtensionContext } from "vscode";
 
 export const enum NodeKind {
 	ROOT = "root",
 	CONTAINER = "container",
 	FUNCTION = "function",
 	APIPATH = "apipath",
-	APIMETHOD = "apimethod"
+	APIMETHOD = "apimethod",
 }
 
 export class ServerlessNode {
 
-	children: ServerlessNode[];
-	name: string;
-	kind: NodeKind;
-	documentRoot: string;
-	data?: any;
+	public children: ServerlessNode[];
+	public name: string;
+	public kind: NodeKind;
+	public documentRoot: string;
+	public data?: any;
 
-	constructor(name: string, kind: NodeKind, data?: Object) {
+	public constructor(name: string, kind: NodeKind, data?: object) {
 		this.children = [];
 		this.name = name;
 		this.kind = kind;
@@ -25,18 +25,18 @@ export class ServerlessNode {
 		this.data = data;
 	}
 
-	get hasChildren(): boolean {
+	public get hasChildren(): boolean {
 		return !_.isEmpty(this.children);
 	}
 
-	getCommand(): Command | null {
+	public getCommand(): Command | null {
 		switch (this.kind) {
 
 		}
 		return null;
 	}
 
-	setDocumentRoot(documentRoot: string) {
+	public setDocumentRoot(documentRoot: string) {
 		this.documentRoot = documentRoot;
 		_.forEach(this.children, child => child.setDocumentRoot(documentRoot));
 	}

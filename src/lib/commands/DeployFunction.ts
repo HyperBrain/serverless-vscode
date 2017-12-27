@@ -1,9 +1,9 @@
-import { window, Uri, ExtensionContext } from "vscode";
-import { Serverless } from "../Serverless";
-import { ServerlessNode, NodeKind } from "../ServerlessNode";
 import * as _ from "lodash";
 import * as path from "path";
-import { Command, CommandBase } from "../CommandHandler";
+import { ExtensionContext, Uri, window } from "vscode";
+import { CommandBase } from "../CommandBase";
+import { Serverless } from "../Serverless";
+import { NodeKind, ServerlessNode } from "../ServerlessNode";
 
 /**
  * Wrapper for Serverless deploy function.
@@ -15,7 +15,7 @@ export class DeployFunction extends CommandBase {
 		super();
 	}
 
-	invoke(node: ServerlessNode): Thenable<void> {
+	public invoke(node: ServerlessNode): Thenable<void> {
 		if (node.kind !== NodeKind.FUNCTION) {
 			return Promise.reject(new Error("Target must be a function"));
 		}
@@ -23,9 +23,9 @@ export class DeployFunction extends CommandBase {
 		return CommandBase.askForStage()
 		.then(stage => {
 			const options = {
-				stage,
+				cwd: node.documentRoot,
 				function: node.name,
-				cwd: node.documentRoot
+				stage,
 			};
 			return Serverless.invoke("deploy function", options);
 		});
