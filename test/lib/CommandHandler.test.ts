@@ -1,4 +1,5 @@
 import * as chai from "chai";
+import * as _ from "lodash";
 import * as sinon from "sinon";
 import * as sinon_chai from "sinon-chai";
 import { commands, ExtensionContext, Memento, window } from "vscode";
@@ -27,7 +28,7 @@ class TestCommand implements ICommand {
 	}
 
 	public invoke(node: ServerlessNode): Thenable<void> {
-		throw new Error("Method not implemented.");
+		throw new Error("TestCommand: Method not implemented.");
 	}
 }
 
@@ -67,6 +68,23 @@ describe("CommandHandler", () => {
 			expect(commandsRegisterCommandSpy).to.have.been.calledOnce;
 			const registeredCommands = await commands.getCommands();
 			expect(registeredCommands).to.include("serverless.test");
+		});
+
+		it("should invoke registered command", async () => {
+			const registeredCommands = await commands.getCommands();
+			if (!_.includes(registeredCommands, "serverless.test")) {
+				CommandHandler.registerCommand(
+					TestCommand,
+					"serverless.test",
+					testContext,
+				);
+			}
+
+			return commands.executeCommand("serverless.test")
+			.then(
+				() => expect(true).to.be.false,
+				_.noop,
+			);
 		});
 	});
 });
