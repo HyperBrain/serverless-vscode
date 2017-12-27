@@ -9,10 +9,10 @@
 	},
 	"license": "MIT",
 	"repository": {
-    	"type": "git",
-    	"url": "https://github.com/HyperBrain/serverless-vscode"
-  	},
-  	"categories": [
+		"type": "git",
+		"url": "https://github.com/HyperBrain/serverless-vscode"
+	},
+	"categories": [
 		"Other"
 	],
 	"activationEvents": [
@@ -132,6 +132,7 @@
 	"scripts": {
 		"vscode:prepublish": "tsc -p ./",
 		"compile": "tsc -watch -p ./",
+		"lint": "tslint \"src/**/*.ts\"",
 		"postinstall": "node ./node_modules/vscode/bin/install",
 		"test": "node ./node_modules/vscode/bin/test"
 	},
@@ -141,6 +142,7 @@
 		"@types/mocha": "^2.2.44",
 		"@types/node": "^8.5.1",
 		"mocha": "^4.0.1",
+		"tslint": "^5.8.0",
 		"typescript": "^2.6.2",
 		"vscode": "^1.1.10"
 	},

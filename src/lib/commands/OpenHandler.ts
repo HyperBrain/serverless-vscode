@@ -1,16 +1,16 @@
-import { ServerlessNode, NodeKind } from "../ServerlessNode";
+import { existsSync } from "fs";
 import * as _ from "lodash";
 import * as path from "path";
-import { existsSync } from "fs";
-import { window, Uri, ExtensionContext } from "vscode";
-import { Command } from "../CommandHandler";
+import { ExtensionContext, Uri, window } from "vscode";
+import { CommandBase } from "../CommandBase";
+import { NodeKind, ServerlessNode } from "../ServerlessNode";
 
-export class OpenHandler implements Command {
+export class OpenHandler implements CommandBase {
 
 	constructor(private context: ExtensionContext) {
 	}
 
-	invoke(node: ServerlessNode): Thenable<void> {
+	public invoke(node: ServerlessNode): Thenable<void> {
 		if (node.kind !== NodeKind.FUNCTION) {
 			return Promise.reject(new Error("Cannot open handler for non function"));
 		}
@@ -21,7 +21,6 @@ export class OpenHandler implements Command {
 		}
 
 		const handlerBase = /^(.*)\..*?$/.exec(handler);
-		console.log(handlerBase);
 		if (!handlerBase) {
 			return Promise.reject(new Error("Your function handler is not formatted correctly"));
 		}
@@ -34,7 +33,7 @@ export class OpenHandler implements Command {
 		}
 
 		return window.showTextDocument(Uri.file(handlerFile), {
-			preview: true
+			preview: true,
 		})
 		.then(() => Promise.resolve());
 	}

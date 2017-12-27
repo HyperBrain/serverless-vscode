@@ -1,19 +1,20 @@
-import { ExtensionContext, window, commands } from 'vscode';
-import * as _ from 'lodash';
+import * as _ from "lodash";
+import { commands, ExtensionContext, window } from "vscode";
 
-import { ServerlessOutlineProvider } from "./lib/serverlessOutline";
+import { CommandHandler } from "./lib/CommandHandler";
+import { DeployFunction } from "./lib/commands/DeployFunction";
 import { InvokeLocal } from "./lib/commands/InvokeLocal";
-import { OpenHandler } from './lib/commands/OpenHandler';
-import { Logs } from './lib/commands/Logs';
-import { CommandHandler } from './lib/CommandHandler';
-import { Resolve } from './lib/commands/Resolve';
-import { DeployFunction } from './lib/commands/DeployFunction';
+import { Logs } from "./lib/commands/Logs";
+import { OpenHandler } from "./lib/commands/OpenHandler";
+import { Resolve } from "./lib/commands/Resolve";
+import { ServerlessOutlineProvider } from "./lib/serverlessOutline";
 
 /**
  * Activation entry point for the extension
  * @param context VSCode context
  */
 export function activate(context: ExtensionContext) {
+	// tslint:disable-next-line:no-console
 	console.log("Loading Serverless extension");
 
 	const serverlessOutlineProvider = new ServerlessOutlineProvider(context);

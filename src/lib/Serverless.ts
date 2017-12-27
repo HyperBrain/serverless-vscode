@@ -1,20 +1,51 @@
-import { Terminal, window, TerminalOptions, workspace, OutputChannel } from "vscode";
+import { spawn } from "child_process";
 import * as _ from "lodash";
 import * as path from "path";
-import { spawn } from "child_process";
+import { OutputChannel, Terminal, TerminalOptions, window, workspace } from "vscode";
 
-export type ServerlessInvokeOptions = {
-	stage?: string,
-	cwd?: string
+export interface IServerlessInvokeOptions {
+	stage?: string;
+	cwd?: string;
 }
 
 const ProcessingOptions = [
-	"cwd"
+	"cwd",
 ];
 
 export class Serverless {
-	cwd: string;
-	channel: OutputChannel;
+
+	public static invoke(command: string, options?: IServerlessInvokeOptions): Thenable<void> {
+		const commandOptions = Serverless.formatOptions(options);
+		const cwd: string = _.get(options, "cwd") || __dirname;
+
+		const serverless = new Serverless(cwd);
+		return serverless.invokeCommand(command, commandOptions);
+	}
+
+	public static invokeWithResult(command: string, options?: IServerlessInvokeOptions): Thenable<string> {
+		const commandOptions = Serverless.formatOptions(options);
+		const cwd: string = _.get(options, "cwd") || __dirname;
+
+		const serverless = new Serverless(cwd);
+		return serverless.invokeCommandWithResult(command, commandOptions);
+	}
+
+	private static formatOptions(invokeOptions?: IServerlessInvokeOptions): string[] {
+		const options = _.defaults({}, _.omitBy(invokeOptions, (value, key) => _.includes(ProcessingOptions, key)), {
+			stage: "dev",
+		});
+		const commandOptions = _.map(options, (value: any, key: string) => {
+			if (value === false) {
+				return `--${key}`;
+			}
+			return `--${key}=${value}`;
+		});
+
+		return commandOptions;
+	}
+
+	private cwd: string;
+	private channel: OutputChannel;
 
 	private constructor(cwd: string) {
 		this.cwd = cwd;
@@ -32,9 +63,9 @@ export class Serverless {
 			const sls = spawn("node", _.concat(
 				[ "node_modules/serverless/bin/serverless" ],
 				_.split(command, " "),
-				options
+				options,
 			), {
-				cwd: this.cwd
+				cwd: this.cwd,
 			});
 
 			sls.on("error", err => {
@@ -45,7 +76,7 @@ export class Serverless {
 				result += data.toString();
 			});
 
-			sls.stderr.on('data', data => {
+			sls.stderr.on("data", data => {
 				this.channel.append(data.toString());
 			});
 
@@ -70,9 +101,9 @@ export class Serverless {
 			const sls = spawn("node", _.concat(
 				[ "node_modules/serverless/bin/serverless" ],
 				_.split(command, " "),
-				options
+				options,
 			), {
-				cwd: this.cwd
+				cwd: this.cwd,
 			});
 
 			sls.on("error", err => {
@@ -83,7 +114,7 @@ export class Serverless {
 				this.channel.append(data.toString());
 			});
 
-			sls.stderr.on('data', data => {
+			sls.stderr.on("data", data => {
 				this.channel.append(data.toString());
 			});
 
@@ -93,33 +124,4 @@ export class Serverless {
 		});
 	}
 
-	private static formatOptions(options?: ServerlessInvokeOptions): string[] {
-		const _options = _.defaults({}, _.omitBy(options, (value, key) => _.includes(ProcessingOptions, key)), {
-			stage: "dev"
-		});
-		const commandOptions = _.map(_options, (value: any, key: string) => {
-			if (value === false) {
-				return `--${key}`;
-			}
-			return `--${key}=${value}`;
-		});
-
-		return commandOptions;
-	}
-
-	static invoke(command: string, options?: ServerlessInvokeOptions): Thenable<void> {
-		const commandOptions = Serverless.formatOptions(options);
-		const cwd: string = _.get(options, "cwd") || __dirname;
-
-		const serverless = new Serverless(cwd);
-		return serverless.invokeCommand(command, commandOptions);
-	}
-
-	static invokeWithResult(command: string, options?: ServerlessInvokeOptions): Thenable<string> {
-		const commandOptions = Serverless.formatOptions(options);
-		const cwd: string = _.get(options, "cwd") || __dirname;
-
-		const serverless = new Serverless(cwd);
-		return serverless.invokeCommandWithResult(command, commandOptions);
-	}
 }
