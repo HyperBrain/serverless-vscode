@@ -17,7 +17,7 @@ export class Resolve extends CommandBase {
 
 	public invoke(node: ServerlessNode): Thenable<void> {
 		if (node.kind !== NodeKind.CONTAINER) {
-			return Promise.reject(new Error("Target must be a function"));
+			return Promise.reject(new Error("Target must be a container"));
 		}
 
 		return CommandBase.askForStage()
