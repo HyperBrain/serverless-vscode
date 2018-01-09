@@ -9,6 +9,33 @@
             "script": "compile",
             "isBackground": true,
             "problemMatcher": ["$tsc-watch"]
-        }
+        },
+		{
+            "label": "lint",
+            "type": "npm",
+			"script": "lint",
+			"presentation": {
+				"echo": true,
+				"reveal": "silent",
+				"focus": false,
+				"panel": "shared"
+			},
+            "problemMatcher": {
+				"owner": "tslint",
+				"fileLocation": [
+				  "relative",
+				  "${workspaceRoot}"
+				],
+				"severity": "warning",
+				"pattern": {
+				  "regexp": "^(ERROR|WARNING): (.*)\\[([1-9]+[0-9]*), ([1-9]+[0-9]*)]: (.*)$",
+				  "severity": 1,
+				  "file": 2,
+				  "line": 3,
+				  "column": 4,
+				  "message": 5
+				}
+			}
+		}
     ]
 }
