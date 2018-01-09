@@ -17,15 +17,6 @@ chai.use(chai_as_promised);
 chai.use(sinon_chai);
 const expect = chai.expect;
 
-class TestContext implements ExtensionContext {
-	public subscriptions: Array<{ dispose(): any; }> = [];
-	public workspaceState: Memento;
-	public globalState: Memento;
-	public extensionPath: string = "myExtensionPath";
-	public asAbsolutePath: sinon.SinonStub = sinon.stub();
-	public storagePath: string = "myStoragePath";
-}
-
 class TestOutputChannel implements OutputChannel {
 	public static create(sandbox: sinon.SinonSandbox) {
 		return new TestOutputChannel(sandbox);
