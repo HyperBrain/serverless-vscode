@@ -10,7 +10,7 @@ const expect = chai.expect;
 
 class CommandBaseTester extends CommandBase {
 	public static askForStage() {
-		return CommandBase.askForStage();
+		return CommandBase.askForStageAndRegion();
 	}
 }
 

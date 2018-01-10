@@ -43,6 +43,11 @@
 					"type": "string",
 					"default": "us-east-1",
 					"description": "Default region for builds and deployments"
+				},
+				"serverless.aws.askForRegion": {
+					"type": "boolean",
+					"default": "false",
+					"description": "Ask for region (false uses the given default region)"
 				}
 			}
 		},
@@ -95,12 +100,20 @@
 		"menus": {
 			"view/item/context": [
 				{
-					"command": "serverless.openHandler",
-					"when": "viewItem == function"
-				},
-				{
 					"command": "serverless.resolve",
 					"when": "viewItem == container"
+				},
+				{
+					"command": "serverless.package",
+					"when": "viewItem == container"
+				},
+				{
+					"command": "serverless.deploy",
+					"when": "viewItem == container"
+				},
+				{
+					"command": "serverless.openHandler",
+					"when": "viewItem == function"
 				},
 				{
 					"command": "serverless.invokeLocal",
