@@ -3,26 +3,18 @@ import * as chaiAsPromised from "chai-as-promised";
 import * as fs from "fs";
 import * as _ from "lodash";
 import * as sinon from "sinon";
-import { ExtensionContext, Memento, window } from "vscode";
+import { window } from "vscode";
 import { CommandBase, ICommand } from "../../../src/lib/CommandBase";
 import { OpenHandler } from "../../../src/lib/commands/OpenHandler";
 import { Serverless } from "../../../src/lib/Serverless";
 import { NodeKind, ServerlessNode } from "../../../src/lib/ServerlessNode";
+import { TestContext } from "../TestContext";
 
 // tslint:disable:no-unused-expression
 
 // tslint:disable-next-line:no-var-requires
 chai.use(chaiAsPromised);
 const expect = chai.expect;
-
-class TestContext implements ExtensionContext {
-	public subscriptions: Array<{ dispose(): any; }> = [];
-	public workspaceState: Memento;
-	public globalState: Memento;
-	public extensionPath: string = "myExtensionPath";
-	public asAbsolutePath: sinon.SinonStub = sinon.stub();
-	public storagePath: string = "myStoragePath";
-}
 
 /**
  * Unit tests for the OpenHandler command

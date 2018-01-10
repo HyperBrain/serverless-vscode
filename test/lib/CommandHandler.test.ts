@@ -6,21 +6,12 @@ import { commands, ExtensionContext, Memento, window } from "vscode";
 import { ICommand } from "../../src/lib/CommandBase";
 import { CommandHandler } from "../../src/lib/CommandHandler";
 import { NodeKind, ServerlessNode } from "../../src/lib/ServerlessNode";
+import { TestContext } from "./TestContext";
 
-// tslint:disable:max-classes-per-file
 // tslint:disable:no-unused-expression
 
 chai.use(sinon_chai);
 const expect = chai.expect;
-
-class TestContext implements ExtensionContext {
-	public subscriptions: Array<{ dispose(): any; }> = [];
-	public workspaceState: Memento;
-	public globalState: Memento;
-	public extensionPath: string = "myExtensionPath";
-	public asAbsolutePath: sinon.SinonStub = sinon.stub();
-	public storagePath: string = "myStoragePath";
-}
 
 class TestCommand implements ICommand {
 	constructor(public context: ExtensionContext) {
