@@ -30,7 +30,7 @@ describe("DeployFunction", () => {
 
 	beforeEach(() => {
 		deployFunctionCommand = new DeployFunction(new TestContext());
-		commandBaseAskForStageStub = sandbox.stub(CommandBase, "askForStage" as any);
+		commandBaseAskForStageStub = sandbox.stub(CommandBase, "askForStageAndRegion" as any);
 		serverlessInvokeStub = sandbox.stub(Serverless, "invoke");
 	});
 
@@ -64,7 +64,7 @@ describe("DeployFunction", () => {
 
 		_.forEach(testNodes, testNode => {
 			it(`should ${testNode.shouldSucceed ? "succeed" : "fail"} for ${testNode.node.name}`, () => {
-				commandBaseAskForStageStub.resolves("stage");
+				commandBaseAskForStageStub.resolves(["stage", "region"]);
 				const expectation = expect(deployFunctionCommand.invoke(testNode.node));
 				if (testNode.shouldSucceed) {
 					return expectation.to.be.fulfilled;
@@ -75,7 +75,7 @@ describe("DeployFunction", () => {
 	});
 
 	it("should ask for the stage", () => {
-		commandBaseAskForStageStub.resolves("stage");
+		commandBaseAskForStageStub.resolves(["stage", "region"]);
 		return expect(deployFunctionCommand.invoke(new ServerlessNode("testNode", NodeKind.FUNCTION)))
 			.to.be.fulfilled
 		.then(() => {
@@ -84,7 +84,7 @@ describe("DeployFunction", () => {
 	});
 
 	it("should invoke Serverless", () => {
-		commandBaseAskForStageStub.resolves("stage");
+		commandBaseAskForStageStub.resolves(["stage", "region"]);
 		serverlessInvokeStub.resolves();
 		return expect(deployFunctionCommand.invoke(new ServerlessNode("testNode", NodeKind.FUNCTION)))
 			.to.be.fulfilled
@@ -93,13 +93,14 @@ describe("DeployFunction", () => {
 			expect(serverlessInvokeStub).to.have.been.calledWithExactly("deploy function", {
 				cwd: "",
 				function: "testNode",
+				region: "region",
 				stage: "stage",
 			});
 		});
 	});
 
 	it("should propagate Serverless error", () => {
-		commandBaseAskForStageStub.resolves("stage");
+		commandBaseAskForStageStub.resolves(["stage", "region"]);
 		serverlessInvokeStub.rejects(new Error("Serverless error"));
 		return expect(deployFunctionCommand.invoke(new ServerlessNode("testNode", NodeKind.FUNCTION)))
 			.to.be.rejectedWith("Serverless error");

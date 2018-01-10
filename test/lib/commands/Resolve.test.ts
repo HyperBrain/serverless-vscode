@@ -85,7 +85,7 @@ describe("Resolve", () => {
 		resolveCommand = new Resolve(new TestContext());
 		windowShowTextDocumentStub = sandbox.stub(window, "showTextDocument");
 		workspaceOpenTextDocumentStub = sandbox.stub(workspace, "openTextDocument");
-		commandBaseAskForStageStub = sandbox.stub(CommandBase, "askForStage" as any);
+		commandBaseAskForStageStub = sandbox.stub(CommandBase, "askForStageAndRegion" as any);
 		serverlessInvokeWithResultStub = sandbox.stub(Serverless, "invokeWithResult");
 
 		testEditor = new TestEditor(sandbox);
@@ -123,7 +123,7 @@ describe("Resolve", () => {
 
 		_.forEach(testNodes, testNode => {
 			it(`should ${testNode.shouldSucceed ? "succeed" : "fail"} for ${testNode.node.name}`, () => {
-				commandBaseAskForStageStub.resolves("stage");
+				commandBaseAskForStageStub.resolves(["stage", "region"]);
 				serverlessInvokeWithResultStub.resolves(testDocument);
 				workspaceOpenTextDocumentStub.resolves();
 				const expectation = expect(resolveCommand.invoke(testNode.node));
@@ -136,7 +136,7 @@ describe("Resolve", () => {
 	});
 
 	it("should ask for the stage", () => {
-		commandBaseAskForStageStub.resolves("stage");
+		commandBaseAskForStageStub.resolves(["stage", "region"]);
 		serverlessInvokeWithResultStub.resolves(testDocument);
 		workspaceOpenTextDocumentStub.resolves();
 		return expect(resolveCommand.invoke(new ServerlessNode("testNode", NodeKind.CONTAINER)))
@@ -147,7 +147,7 @@ describe("Resolve", () => {
 	});
 
 	it("should invoke Serverless", () => {
-		commandBaseAskForStageStub.resolves("stage");
+		commandBaseAskForStageStub.resolves(["stage", "region"]);
 		serverlessInvokeWithResultStub.resolves();
 		serverlessInvokeWithResultStub.resolves(testDocument);
 		workspaceOpenTextDocumentStub.resolves();
@@ -157,6 +157,7 @@ describe("Resolve", () => {
 			expect(serverlessInvokeWithResultStub).to.have.been.calledOnce;
 			expect(serverlessInvokeWithResultStub).to.have.been.calledWithExactly("print", {
 				cwd: "",
+				region: "region",
 				stage: "stage",
 			});
 			expect(workspaceOpenTextDocumentStub).to.have.been.calledOnce;
@@ -166,7 +167,7 @@ describe("Resolve", () => {
 	});
 
 	it("should propagate Serverless error", () => {
-		commandBaseAskForStageStub.resolves("stage");
+		commandBaseAskForStageStub.resolves(["stage", "region"]);
 		serverlessInvokeWithResultStub.rejects(new Error("Serverless error"));
 		return expect(resolveCommand.invoke(new ServerlessNode("testNode", NodeKind.CONTAINER)))
 			.to.be.rejectedWith("Serverless error");

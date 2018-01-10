@@ -33,7 +33,7 @@ describe("InvokeLocal", () => {
 
 	beforeEach(() => {
 		InvokeLocalCommand = new InvokeLocal(new TestContext());
-		commandBaseAskForStageStub = sandbox.stub(CommandBase, "askForStage" as any);
+		commandBaseAskForStageStub = sandbox.stub(CommandBase, "askForStageAndRegion" as any);
 		windowShowOpenDialogStub = sandbox.stub(window, "showOpenDialog");
 		serverlessInvokeStub = sandbox.stub(Serverless, "invoke");
 	});
@@ -68,7 +68,7 @@ describe("InvokeLocal", () => {
 
 		_.forEach(testNodes, testNode => {
 			it(`should ${testNode.shouldSucceed ? "succeed" : "fail"} for ${testNode.node.name}`, () => {
-				commandBaseAskForStageStub.resolves("stage");
+				commandBaseAskForStageStub.resolves(["stage", "region"]);
 				windowShowOpenDialogStub.resolves([
 					Uri.file("/my/test/event.json"),
 				]);
@@ -82,7 +82,7 @@ describe("InvokeLocal", () => {
 	});
 
 	it("should ask for the stage", () => {
-		commandBaseAskForStageStub.resolves("stage");
+		commandBaseAskForStageStub.resolves(["stage", "region"]);
 		windowShowOpenDialogStub.resolves([
 			Uri.file("/my/test/event.json"),
 		]);
@@ -94,7 +94,7 @@ describe("InvokeLocal", () => {
 	});
 
 	it("should ask for an event json", () => {
-		commandBaseAskForStageStub.resolves("stage");
+		commandBaseAskForStageStub.resolves(["stage", "region"]);
 		windowShowOpenDialogStub.resolves([
 			Uri.file("/my/test/event.json"),
 		]);
@@ -116,7 +116,7 @@ describe("InvokeLocal", () => {
 
 	describe("when event selection is cancelled", () => {
 		it("should do nothing for empty array", () => {
-			commandBaseAskForStageStub.resolves("stage");
+			commandBaseAskForStageStub.resolves(["stage", "region"]);
 			windowShowOpenDialogStub.resolves([]);
 			return expect(InvokeLocalCommand.invoke(new ServerlessNode("testNode", NodeKind.FUNCTION)))
 				.to.be.fulfilled
@@ -127,7 +127,7 @@ describe("InvokeLocal", () => {
 		});
 
 		it("should do nothing for undefined", () => {
-			commandBaseAskForStageStub.resolves("stage");
+			commandBaseAskForStageStub.resolves(["stage", "region"]);
 			windowShowOpenDialogStub.resolves();
 			return expect(InvokeLocalCommand.invoke(new ServerlessNode("testNode", NodeKind.FUNCTION)))
 				.to.be.fulfilled
@@ -140,7 +140,7 @@ describe("InvokeLocal", () => {
 
 	it("should invoke Serverless", () => {
 		const testFilePath = "/my/test/event.json";
-		commandBaseAskForStageStub.resolves("stage");
+		commandBaseAskForStageStub.resolves(["stage", "region"]);
 		windowShowOpenDialogStub.resolves([
 			Uri.file(testFilePath),
 		]);
@@ -153,13 +153,14 @@ describe("InvokeLocal", () => {
 				cwd: "",
 				function: "testNode",
 				path: path.relative("", testFilePath),
+				region: "region",
 				stage: "stage",
 			});
 		});
 	});
 
 	it("should propagate Serverless error", () => {
-		commandBaseAskForStageStub.resolves("stage");
+		commandBaseAskForStageStub.resolves(["stage", "region"]);
 		windowShowOpenDialogStub.resolves([
 			Uri.file("/my/test/event.json"),
 		]);

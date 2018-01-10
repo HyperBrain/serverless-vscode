@@ -9,7 +9,7 @@ chai.use(sinon_chai);
 const expect = chai.expect;
 
 class CommandBaseTester extends CommandBase {
-	public static askForStage() {
+	public static askForStageAndRegion() {
 		return CommandBase.askForStageAndRegion();
 	}
 }
@@ -34,7 +34,7 @@ describe("CommandBase", () => {
 	describe("askForStage", () => {
 		it("should set prompt and placeholder", async () => {
 			windowShowInputBoxStub.resolves("");
-			const result = await CommandBaseTester.askForStage();
+			const result = await CommandBaseTester.askForStageAndRegion();
 			expect(windowShowInputBoxStub).to.have.been.calledWithExactly({
 				placeHolder: "dev",
 				prompt: "Stage (defaults to dev)",
@@ -43,14 +43,14 @@ describe("CommandBase", () => {
 
 		it("should default to dev", async () => {
 			windowShowInputBoxStub.resolves("");
-			const result = await CommandBaseTester.askForStage();
-			expect(result).to.equal("dev");
+			const result = await CommandBaseTester.askForStageAndRegion();
+			expect(result).to.deep.equal(["dev", "us-east-1"]);
 		});
 
 		it("should set stage to user input", async () => {
 			windowShowInputBoxStub.resolves("myStage");
-			const result = await CommandBaseTester.askForStage();
-			expect(result).to.equal("myStage");
+			const result = await CommandBaseTester.askForStageAndRegion();
+			expect(result).to.deep.equal(["myStage", "myStage"]);
 		});
 	});
 
