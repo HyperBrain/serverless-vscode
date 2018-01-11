@@ -2,10 +2,12 @@ import * as _ from "lodash";
 import { commands, ExtensionContext, window } from "vscode";
 
 import { CommandHandler } from "./lib/CommandHandler";
+import { Deploy } from "./lib/commands/Deploy";
 import { DeployFunction } from "./lib/commands/DeployFunction";
 import { InvokeLocal } from "./lib/commands/InvokeLocal";
 import { Logs } from "./lib/commands/Logs";
 import { OpenHandler } from "./lib/commands/OpenHandler";
+import { Package } from "./lib/commands/Package";
 import { Resolve } from "./lib/commands/Resolve";
 import { ServerlessOutlineProvider } from "./lib/serverlessOutline";
 
@@ -25,6 +27,8 @@ export function activate(context: ExtensionContext) {
 	CommandHandler.registerCommand(Logs, "serverless.logs", context);
 	CommandHandler.registerCommand(InvokeLocal, "serverless.invokeLocal", context);
 	CommandHandler.registerCommand(DeployFunction, "serverless.deployFunction", context);
+	CommandHandler.registerCommand(Package, "serverless.package", context);
+	CommandHandler.registerCommand(Deploy, "serverless.deploy", context);
 
 	return null;
 }

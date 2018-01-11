@@ -56,10 +56,24 @@ The outline will contain a `functions` and an `API` hive, which contain the defi
 project and the defined API endpoint hierarchy. Each item in the outline has a context menu that allows
 access to context specific commands. Most of the command will ask you for the target stage when triggered.
 
-#### Variable resolution (Resolve)
+#### Top container objects
 
-Each of the top hives has a context menu, that allows you to show a generated `resolved.yml`, i.e.
-your `serverless.yml` with all Serverless variables resolved to their values for a selected stage.
+Each of the top hives has a context menu that lets you invoke service/project related functions.
+
+![Function](images/service-demo.png "Service")
+
+##### Package
+
+Package will ask for the stage and optionally region and packages the service with `serverless package`.
+
+##### Deploy
+
+Package will ask for the stage and optionally region and deploys the service with `serverless deploy`.
+
+##### Variable resolution (Resolve)
+
+Resolve allows you to show a generated `resolved.yml`, i.e. your `serverless.yml` with all Serverless
+variables resolved to their values for a selected stage.
 
 #### Functions
 
