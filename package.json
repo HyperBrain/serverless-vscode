@@ -1,7 +1,7 @@
 {
 	"name": "serverless-vscode",
 	"description": "Serverless integration. Lets you manage your service from within VSCode.",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"publisher": "frankschmid",
 	"author": "Frank Schmid <fschmid740@gmail.com>",
 	"engines": {
