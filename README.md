@@ -37,11 +37,11 @@ When set to false (the default), the extension will not ask for the region to de
 one, set as `serverless.aws.defaultRegion`. This reduces the typing needed to execute a single
 command, as normally you'll not deploy cross-region that often.
 
-### serverless.aws.defaultRegion
+### serverless.aws.defaultStage
 
 The defult stage that is assumed, if you just press ENTER in the stage input field when executing a command.
 
-### serverless.aws.defaultStage
+### serverless.aws.defaultRegion
 
 The defult region that is assumed, if you just press ENTER in the stage input field when executing a command. See also `serverless.aws.askForRegion`.
 
