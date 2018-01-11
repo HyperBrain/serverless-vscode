@@ -26,12 +26,12 @@
 			"properties": {
 				"serverless.useGlobal": {
 					"type": "boolean",
-					"default": "false",
+					"default": false,
 					"description": "Use global Serverless installation"
 				},
 				"serverless.slsDebug": {
 					"type": "boolean",
-					"default": "false",
+					"default": false,
 					"description": "Set SLS_DEBUG for debug output"
 				},
 				"serverless.aws.defaultStage": {
@@ -46,7 +46,7 @@
 				},
 				"serverless.aws.askForRegion": {
 					"type": "boolean",
-					"default": "false",
+					"default": false,
 					"description": "Ask for region (false uses the given default region)"
 				}
 			}
