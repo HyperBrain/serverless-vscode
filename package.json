@@ -22,7 +22,7 @@
 	"contributes": {
 		"configuration": {
 			"type": "object",
-			"title": "Serverless configuration",
+			"title": "Serverless Configuration",
 			"properties": {
 				"serverless.useGlobal": {
 					"type": "boolean",

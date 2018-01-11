@@ -24,6 +24,27 @@ That means, that Serverless must be a development dependency of the project itse
 version of the extension will also support the globally installed Serverless framework and a
 configuration for that.
 
+## Configuration
+
+The extension supports user and workspace configuration. To access the configuration settings,
+open `File->Preferences->Settings` (workspace or user) and expand the `Serverless Configuration` node.
+
+The following configuration settings are available:
+
+### serverless.aws.askForRegion
+
+When set to false (the default), the extension will not ask for the region to deploy to but use the
+one, set as `serverless.aws.defaultRegion`. This reduces the typing needed to execute a single
+command, as normally you'll not deploy cross-region that often.
+
+### serverless.aws.defaultRegion
+
+The defult stage that is assumed, if you just press ENTER in the stage input field when executing a command.
+
+### serverless.aws.defaultStage
+
+The defult region that is assumed, if you just press ENTER in the stage input field when executing a command. See also `serverless.aws.askForRegion`.
+
 ## Usage
 
 ### The Serverless outline
