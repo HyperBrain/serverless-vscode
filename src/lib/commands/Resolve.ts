@@ -20,11 +20,12 @@ export class Resolve extends CommandBase {
 			return Promise.reject(new Error("Target must be a container"));
 		}
 
-		return CommandBase.askForStage()
-		.then((stage: string) => {
+		return CommandBase.askForStageAndRegion()
+		.then(result => {
 			const options = {
 				cwd: node.documentRoot,
-				stage,
+				region: result[1],
+				stage: result[0],
 			};
 			return Serverless.invokeWithResult("print", options);
 		})

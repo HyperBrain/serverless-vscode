@@ -30,7 +30,7 @@ describe("Logs", () => {
 
 	beforeEach(() => {
 		logsCommand = new Logs(new TestContext());
-		commandBaseAskForStageStub = sandbox.stub(CommandBase, "askForStage" as any);
+		commandBaseAskForStageStub = sandbox.stub(CommandBase, "askForStageAndRegion" as any);
 		serverlessInvokeStub = sandbox.stub(Serverless, "invoke");
 	});
 
@@ -64,7 +64,7 @@ describe("Logs", () => {
 
 		_.forEach(testNodes, testNode => {
 			it(`should ${testNode.shouldSucceed ? "succeed" : "fail"} for ${testNode.node.name}`, () => {
-				commandBaseAskForStageStub.resolves("stage");
+				commandBaseAskForStageStub.resolves(["stage", "region"]);
 				const expectation = expect(logsCommand.invoke(testNode.node));
 				if (testNode.shouldSucceed) {
 					return expectation.to.be.fulfilled;
@@ -75,7 +75,7 @@ describe("Logs", () => {
 	});
 
 	it("should ask for the stage", () => {
-		commandBaseAskForStageStub.resolves("stage");
+		commandBaseAskForStageStub.resolves(["stage", "region"]);
 		return expect(logsCommand.invoke(new ServerlessNode("testNode", NodeKind.FUNCTION)))
 			.to.be.fulfilled
 		.then(() => {
@@ -84,7 +84,7 @@ describe("Logs", () => {
 	});
 
 	it("should invoke Serverless", () => {
-		commandBaseAskForStageStub.resolves("stage");
+		commandBaseAskForStageStub.resolves(["stage", "region"]);
 		serverlessInvokeStub.resolves();
 		return expect(logsCommand.invoke(new ServerlessNode("testNode", NodeKind.FUNCTION)))
 			.to.be.fulfilled
@@ -93,13 +93,14 @@ describe("Logs", () => {
 			expect(serverlessInvokeStub).to.have.been.calledWithExactly("logs", {
 				cwd: "",
 				function: "testNode",
+				region: "region",
 				stage: "stage",
 			});
 		});
 	});
 
 	it("should propagate Serverless error", () => {
-		commandBaseAskForStageStub.resolves("stage");
+		commandBaseAskForStageStub.resolves(["stage", "region"]);
 		serverlessInvokeStub.rejects(new Error("Serverless error"));
 		return expect(logsCommand.invoke(new ServerlessNode("testNode", NodeKind.FUNCTION)))
 			.to.be.rejectedWith("Serverless error");

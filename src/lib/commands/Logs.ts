@@ -20,12 +20,13 @@ export class Logs extends CommandBase {
 			return Promise.reject(new Error("Target must be a function"));
 		}
 
-		return CommandBase.askForStage()
-		.then((stage: string) => {
+		return CommandBase.askForStageAndRegion()
+		.then(result => {
 			const options = {
 				cwd: node.documentRoot,
 				function: node.name,
-				stage,
+				region: result[1],
+				stage: result[0],
 			};
 			return Serverless.invoke("logs", options);
 		});

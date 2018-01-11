@@ -20,8 +20,8 @@ export class InvokeLocal extends CommandBase {
 			return Promise.reject(new Error("Target must be a function"));
 		}
 
-		return CommandBase.askForStage()
-		.then(stage => {
+		return CommandBase.askForStageAndRegion()
+		.then(result => {
 			return window.showOpenDialog({
 				canSelectFiles: true,
 				canSelectFolders: false,
@@ -41,7 +41,8 @@ export class InvokeLocal extends CommandBase {
 					cwd: node.documentRoot,
 					function: node.name,
 					path: filePath,
-					stage,
+					region: result[1],
+					stage: result[0],
 				};
 				return Serverless.invoke("invoke local", options);
 			});

@@ -22,16 +22,16 @@
 	"contributes": {
 		"configuration": {
 			"type": "object",
-			"title": "Serverless configuration",
+			"title": "Serverless Configuration",
 			"properties": {
 				"serverless.useGlobal": {
 					"type": "boolean",
-					"default": "false",
+					"default": false,
 					"description": "Use global Serverless installation"
 				},
 				"serverless.slsDebug": {
 					"type": "boolean",
-					"default": "false",
+					"default": false,
 					"description": "Set SLS_DEBUG for debug output"
 				},
 				"serverless.aws.defaultStage": {
@@ -43,6 +43,11 @@
 					"type": "string",
 					"default": "us-east-1",
 					"description": "Default region for builds and deployments"
+				},
+				"serverless.aws.askForRegion": {
+					"type": "boolean",
+					"default": false,
+					"description": "Ask for region (false uses the given default region)"
 				}
 			}
 		},
@@ -95,12 +100,20 @@
 		"menus": {
 			"view/item/context": [
 				{
-					"command": "serverless.openHandler",
-					"when": "viewItem == function"
-				},
-				{
 					"command": "serverless.resolve",
 					"when": "viewItem == container"
+				},
+				{
+					"command": "serverless.package",
+					"when": "viewItem == container"
+				},
+				{
+					"command": "serverless.deploy",
+					"when": "viewItem == container"
+				},
+				{
+					"command": "serverless.openHandler",
+					"when": "viewItem == function"
 				},
 				{
 					"command": "serverless.invokeLocal",
