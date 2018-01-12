@@ -4,7 +4,7 @@ import * as fs from "fs";
 import * as _ from "lodash";
 import * as sinon from "sinon";
 import { window } from "vscode";
-import { CommandBase, ICommand } from "../../../src/lib/CommandBase";
+import { CommandBase } from "../../../src/lib/CommandBase";
 import { OpenHandler } from "../../../src/lib/commands/OpenHandler";
 import { Serverless } from "../../../src/lib/Serverless";
 import { NodeKind, ServerlessNode } from "../../../src/lib/ServerlessNode";

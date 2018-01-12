@@ -4,7 +4,7 @@ import * as _ from "lodash";
 import * as path from "path";
 import * as sinon from "sinon";
 import { Uri, window } from "vscode";
-import { CommandBase, ICommand } from "../../../src/lib/CommandBase";
+import { CommandBase } from "../../../src/lib/CommandBase";
 import { InvokeLocal } from "../../../src/lib/commands/InvokeLocal";
 import { Serverless } from "../../../src/lib/Serverless";
 import { NodeKind, ServerlessNode } from "../../../src/lib/ServerlessNode";

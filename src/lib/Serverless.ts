@@ -53,7 +53,7 @@ export class Serverless {
 
 	private invokeCommandWithResult(command: string, options: string[]): Thenable<string> {
 		this.channel = window.createOutputChannel("Serverless");
-		this.channel.show();
+		this.channel.show(true);
 
 		const serverlessCommand = `Running "serverless ${command} ${_.join(options, " ")}"`;
 		this.channel.appendLine(serverlessCommand);
@@ -85,6 +85,8 @@ export class Serverless {
 					this.channel.append(result);
 					reject(new Error(`Command exited with ${code}`));
 				}
+				this.channel.appendLine("\nCommand finished.");
+				this.channel.show(true);
 				resolve(result);
 			});
 		});
@@ -119,6 +121,8 @@ export class Serverless {
 			});
 
 			sls.on("exit", code => {
+				this.channel.appendLine("\nCommand finished.");
+				this.channel.show(true);
 				resolve();
 			});
 		});
