@@ -14,6 +14,10 @@ class CommandBaseTester extends CommandBase {
 	public static askForStageAndRegion() {
 		return CommandBase.askForStageAndRegion();
 	}
+
+	public invoke(node: ServerlessNode): Thenable<void> {
+		return Promise.resolve();
+	}
 }
 
 describe("CommandBase", () => {
@@ -21,7 +25,6 @@ describe("CommandBase", () => {
 	let workspaceGetConfigurationStub: sinon.SinonStub;
 	let configurationMock: any;
 	let windowShowInputBoxStub: sinon.SinonStub;
-	const commandBase = new CommandBase();
 
 	before(() => {
 		sandbox = sinon.createSandbox();
@@ -110,14 +113,6 @@ describe("CommandBase", () => {
 				const result = await CommandBaseTester.askForStageAndRegion();
 				expect(result).to.deep.equal(["myStage", "myRegion"]);
 			});
-		});
-	});
-
-	describe("invoke", () => {
-		const testNode = new ServerlessNode("test", NodeKind.CONTAINER);
-
-		it("should throw on invoke", () => {
-			expect(() => commandBase.invoke(testNode)).to.throw("Must be overridden.");
 		});
 	});
 });

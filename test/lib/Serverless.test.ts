@@ -5,7 +5,6 @@ import * as _ from "lodash";
 import * as sinon from "sinon";
 import * as sinon_chai from "sinon-chai";
 import { commands, ExtensionContext, Memento, OutputChannel, window } from "vscode";
-import { ICommand } from "../../src/lib/CommandBase";
 import { CommandHandler } from "../../src/lib/CommandHandler";
 import { IServerlessInvokeOptions, Serverless } from "../../src/lib/Serverless";
 import { NodeKind, ServerlessNode } from "../../src/lib/ServerlessNode";

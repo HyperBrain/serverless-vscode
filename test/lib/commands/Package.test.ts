@@ -2,7 +2,7 @@ import * as chai from "chai";
 import * as chaiAsPromised from "chai-as-promised";
 import * as _ from "lodash";
 import * as sinon from "sinon";
-import { CommandBase, ICommand } from "../../../src/lib/CommandBase";
+import { CommandBase } from "../../../src/lib/CommandBase";
 import { Package } from "../../../src/lib/commands/Package";
 import { Serverless } from "../../../src/lib/Serverless";
 import { NodeKind, ServerlessNode } from "../../../src/lib/ServerlessNode";

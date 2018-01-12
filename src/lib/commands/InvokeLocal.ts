@@ -12,7 +12,7 @@ import { NodeKind, ServerlessNode } from "../ServerlessNode";
 export class InvokeLocal extends CommandBase {
 
 	constructor(private context: ExtensionContext) {
-		super();
+		super(true);
 	}
 
 	public invoke(node: ServerlessNode): Thenable<void> {

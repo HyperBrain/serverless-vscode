@@ -17,7 +17,7 @@ import {
 	window,
 	workspace,
 } from "vscode";
-import { CommandBase, ICommand } from "../../../src/lib/CommandBase";
+import { CommandBase } from "../../../src/lib/CommandBase";
 import { Resolve } from "../../../src/lib/commands/Resolve";
 import { Serverless } from "../../../src/lib/Serverless";
 import { NodeKind, ServerlessNode } from "../../../src/lib/ServerlessNode";

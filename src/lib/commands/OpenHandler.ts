@@ -5,9 +5,10 @@ import { ExtensionContext, Uri, window } from "vscode";
 import { CommandBase } from "../CommandBase";
 import { NodeKind, ServerlessNode } from "../ServerlessNode";
 
-export class OpenHandler implements CommandBase {
+export class OpenHandler extends CommandBase {
 
 	constructor(private context: ExtensionContext) {
+		super();
 	}
 
 	public invoke(node: ServerlessNode): Thenable<void> {

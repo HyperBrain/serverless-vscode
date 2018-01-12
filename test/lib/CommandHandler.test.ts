@@ -3,7 +3,7 @@ import * as _ from "lodash";
 import * as sinon from "sinon";
 import * as sinon_chai from "sinon-chai";
 import { commands, ExtensionContext, Memento, window } from "vscode";
-import { ICommand } from "../../src/lib/CommandBase";
+import { CommandBase } from "../../src/lib/CommandBase";
 import { CommandHandler } from "../../src/lib/CommandHandler";
 import { NodeKind, ServerlessNode } from "../../src/lib/ServerlessNode";
 import { TestContext } from "./TestContext";
@@ -13,8 +13,9 @@ import { TestContext } from "./TestContext";
 chai.use(sinon_chai);
 const expect = chai.expect;
 
-class TestCommand implements ICommand {
+class TestCommand extends CommandBase {
 	constructor(public context: ExtensionContext) {
+		super();
 		this.invoke = sinon.stub();
 	}
 
