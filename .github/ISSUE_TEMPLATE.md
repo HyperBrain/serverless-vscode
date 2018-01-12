@@ -24,6 +24,7 @@ Similar or dependent issue(s):
 
 ## Additional Data
 
+* **Extension version**:
 * **Serverless Framework**:
 Version:
 - [ ] Serverless installed globally
