@@ -9,6 +9,7 @@ import { NodeKind, ServerlessNode } from "../../src/lib/ServerlessNode";
 import { TestContext } from "./TestContext";
 
 // tslint:disable:no-unused-expression
+// tslint:disable:max-classes-per-file
 
 chai.use(sinon_chai);
 const expect = chai.expect;
@@ -24,9 +25,24 @@ class TestCommand extends CommandBase {
 	}
 }
 
+class TestCommandExclusive extends CommandBase {
+	constructor(public context: ExtensionContext) {
+		super(true);
+	}
+
+	public invoke(node: ServerlessNode): Thenable<void> {
+		return new Promise(resolve => {
+			setTimeout(() => {
+				resolve();
+			}, 200);
+		});
+	}
+}
+
 describe("CommandHandler", () => {
 	let sandbox: sinon.SinonSandbox;
 	let windowShowInputBoxStub: sinon.SinonStub;
+	let windowShowErrorMessageStub: sinon.SinonStub;
 
 	before(() => {
 		sandbox = sinon.createSandbox();
@@ -34,6 +50,7 @@ describe("CommandHandler", () => {
 
 	beforeEach(() => {
 		windowShowInputBoxStub = sandbox.stub(window, "showInputBox");
+		windowShowErrorMessageStub = sandbox.stub(window, "showErrorMessage");
 	});
 
 	afterEach(() => {
@@ -77,6 +94,36 @@ describe("CommandHandler", () => {
 				() => expect(true).to.be.false,
 				_.noop,
 			);
+		});
+	});
+
+	describe("Commands", () => {
+		let testContext: ExtensionContext;
+
+		before(() => {
+			testContext = new TestContext();
+			CommandHandler.registerCommand(
+				TestCommandExclusive,
+				"serverless.testexclusive",
+				testContext,
+			);
+		});
+
+		it("should execute exclusively alone", async () => {
+			return expect(commands.executeCommand("serverless.testexclusive"))
+				.to.been.fulfilled
+			.then(() => {
+				expect(windowShowErrorMessageStub).to.not.have.been.called;
+			});
+		});
+
+		it("should execute only one exclusive command", async () => {
+			CommandHandler.isCommandRunning = true;
+			return expect(commands.executeCommand("serverless.testexclusive"))
+				.to.been.rejected
+			.then(() => {
+				expect(windowShowErrorMessageStub).to.have.been.called;
+			});
 		});
 	});
 });
