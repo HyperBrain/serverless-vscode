@@ -12,12 +12,6 @@ to start Serverless commands from a separate command line.
 In order to install an extension you need to open the extension palette and search for serverless-vscode.
 You can then install it.
 
-### Alpha version
-
-This is currently an alpha version, that integrates only a subset of possible commands.
-See the GitHub repository for remaining planned features for the final version. You're encouraged to
-test the version and create additional feature requests.
-
 **Currently the extension only supports Serverless projects with Serverless installed locally!**
 
 That means, that Serverless must be a development dependency of the project itself. A subsequent
@@ -110,4 +104,4 @@ The API hive shows the combined API that will eventually be deployed to API Gate
 
 ## Releases
 
-See the CHANGELOG.md file.
+See the `CHANGELOG.MD` file.
