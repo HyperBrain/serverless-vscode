@@ -1,3 +1,6 @@
+## 1.0.0
+- Parallel execution of serverless commands should be blocked [#17](https://github.com/HyperBrain/serverless-vscode/issues/17)
+
 ## 0.0.4
 - Support package and deploy [#10](https://github.com/HyperBrain/serverless-vscode/issues/10)
 - Support region and default configuration [#11](https://github.com/HyperBrain/serverless-vscode/issues/11)
