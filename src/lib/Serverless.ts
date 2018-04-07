@@ -12,6 +12,11 @@ const ProcessingOptions = [
 	"cwd",
 ];
 
+interface IServerlessExecutable {
+	executable: string;
+	executableArgs: string[];
+}
+
 export class Serverless {
 
 	public static invoke(command: string, options?: IServerlessInvokeOptions): Thenable<void> {
@@ -45,23 +50,37 @@ export class Serverless {
 	}
 
 	private cwd: string;
-	private channel: OutputChannel;
+	private serverlessExecutable: IServerlessExecutable;
 
 	private constructor(cwd: string) {
+		const configuration = workspace.getConfiguration();
+		const useGlobalServerless = configuration.get("serverless.useGlobal") || false;
+
+		if (useGlobalServerless) {
+			this.serverlessExecutable = {
+				executable: "serverless",
+				executableArgs: [],
+			};
+		} else {
+			this.serverlessExecutable = {
+				executable: "node",
+				executableArgs: [ "node_modules/serverless/bin/serverless" ],
+			};
+		}
 		this.cwd = cwd;
 	}
 
 	private invokeCommandWithResult(command: string, options: string[]): Thenable<string> {
-		this.channel = window.createOutputChannel("Serverless");
-		this.channel.show(true);
+		const channel = window.createOutputChannel("Serverless");
+		channel.show(true);
 
 		const serverlessCommand = `Running "serverless ${command} ${_.join(options, " ")}"`;
-		this.channel.appendLine(serverlessCommand);
+		channel.appendLine(serverlessCommand);
 
 		return new Promise((resolve, reject) => {
 			let result = "";
-			const sls = spawn("node", _.concat(
-				[ "node_modules/serverless/bin/serverless" ],
+			const sls = spawn(this.serverlessExecutable.executable, _.concat(
+				this.serverlessExecutable.executableArgs,
 				_.split(command, " "),
 				options,
 			), {
@@ -77,31 +96,31 @@ export class Serverless {
 			});
 
 			sls.stderr.on("data", data => {
-				this.channel.append(data.toString());
+				channel.append(data.toString());
 			});
 
 			sls.on("exit", code => {
 				if (code !== 0) {
-					this.channel.append(result);
+					channel.append(result);
 					reject(new Error(`Command exited with ${code}`));
 				}
-				this.channel.appendLine("\nCommand finished.");
-				this.channel.show(true);
+				channel.appendLine("\nCommand finished.");
+				channel.show(true);
 				resolve(result);
 			});
 		});
 	}
 
 	private invokeCommand(command: string, options: string[]): Thenable<void> {
-		this.channel = window.createOutputChannel(command);
-		this.channel.show();
+		const channel = window.createOutputChannel(command);
+		channel.show();
 
 		const serverlessCommand = `Running "serverless ${command} ${_.join(options, " ")}"`;
-		this.channel.appendLine(serverlessCommand);
+		channel.appendLine(serverlessCommand);
 
 		return new Promise((resolve, reject) => {
-			const sls = spawn("node", _.concat(
-				[ "node_modules/serverless/bin/serverless" ],
+			const sls = spawn(this.serverlessExecutable.executable, _.concat(
+				this.serverlessExecutable.executableArgs,
 				_.split(command, " "),
 				options,
 			), {
@@ -113,16 +132,16 @@ export class Serverless {
 			});
 
 			sls.stdout.on("data", data => {
-				this.channel.append(data.toString());
+				channel.append(data.toString());
 			});
 
 			sls.stderr.on("data", data => {
-				this.channel.append(data.toString());
+				channel.append(data.toString());
 			});
 
 			sls.on("exit", code => {
-				this.channel.appendLine("\nCommand finished.");
-				this.channel.show(true);
+				channel.appendLine("\nCommand finished.");
+				channel.show(true);
 				resolve();
 			});
 		});

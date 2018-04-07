@@ -3,6 +3,7 @@ import * as chaiAsPromised from "chai-as-promised";
 import * as _ from "lodash";
 import * as sinon from "sinon";
 import {
+	EndOfLine,
 	Position,
 	Range,
 	Selection,
@@ -13,6 +14,7 @@ import {
 	TextEditorEdit,
 	TextEditorOptions,
 	TextEditorRevealType,
+	Uri,
 	ViewColumn,
 	window,
 	workspace,
@@ -24,19 +26,56 @@ import { NodeKind, ServerlessNode } from "../../../src/lib/ServerlessNode";
 import { TestContext } from "../TestContext";
 
 // tslint:disable:no-unused-expression
+// tslint:disable:max-classes-per-file
 
 // tslint:disable-next-line:no-var-requires
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
+class TextDocumentMock implements TextDocument {
+	public uri: Uri = Uri.file("test.txt");
+	public fileName: string = "test.txt";
+	public isUntitled: boolean = true;
+	public languageId: string = "";
+	public version: number = 0;
+	public isDirty: boolean = false;
+	public isClosed: boolean = false;
+	public eol: EndOfLine = EndOfLine.LF;
+	public lineCount: number = 0;
+
+	public lineAt = sinon.stub();
+	public save = sinon.stub().resolves(true);
+	public offsetAt = sinon.stub();
+	public positionAt = sinon.stub();
+	public getText = sinon.stub();
+	public getWordRangeAtPosition = sinon.stub();
+	public validateRange = sinon.stub();
+	public validatePosition = sinon.stub();
+}
+
+class SelectionMock implements Selection {
+	public anchor: Position = new Position(0, 0);
+	public active: Position = new Position(0, 0);
+	public isReversed: boolean = false;
+	public start: Position = new Position(0, 0);
+	public end: Position = new Position(0, 0);
+	public isEmpty: boolean = true;
+	public isSingleLine: boolean = false;
+	public contains = sinon.stub();
+	public isEqual = sinon.stub();
+	public intersection = sinon.stub();
+	public union = sinon.stub();
+	public with = sinon.stub();
+}
+
 /**
  * Stubbed TextEditor.
  */
 class TestEditor implements TextEditor {
-	public document: TextDocument;
-	public selection: Selection;
-	public selections: Selection[];
-	public options: TextEditorOptions;
+	public document: TextDocument = new TextDocumentMock();
+	public selection: Selection = new SelectionMock();
+	public selections: Selection[] = [];
+	public options: TextEditorOptions = {};
 	public viewColumn?: ViewColumn | undefined;
 
 	public edit: sinon.SinonStub;
