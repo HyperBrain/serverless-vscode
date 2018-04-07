@@ -118,7 +118,7 @@ export class ServerlessOutlineProvider implements TreeDataProvider<ServerlessNod
 
 			// Add nodes for the function events
 			if (!_.isEmpty(func.events)) {
-				const httpEvents = _.filter(func.events, funcEvent => funcEvent.http);
+				const httpEvents: any[] = _.filter(func.events, funcEvent => funcEvent.http);
 				if (!_.isEmpty(httpEvents)) {
 					const httpNode = new ServerlessNode("HTTP", NodeKind.CONTAINER);
 					_.forEach(httpEvents, ({ http }) => {
